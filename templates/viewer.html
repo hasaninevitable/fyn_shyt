@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF Viewer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <style>
+        #pdf-canvas {
+            border: 1px solid #ccc;
+            position: relative;
+        }
+
+        /* Highlight rectangle */
+        #highlight-rect {
+            position: absolute;
+            border: 2px solid red;
+            background-color: rgba(255, 0, 0, 0.3);
+            pointer-events: none;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>Locating ESG Sentence</h2>
+    <p>Page: {{ page }}, Bounding Box: {{ bbox }}</p>
+    <a href="{{ url_for('search.search') }}">Back to ESG Results</a>
+    <br><br>
+
+    <div style="position:relative;">
+        <canvas id="pdf-canvas"></canvas>
+        <div id="highlight-rect"></div>
+    </div>
+
+    <!-- Pass data to JS -->
+    <script>
+      // @ts-nocheck   <-- tells VS Code not to validate JS here
+      window.PDF_DATA = {
+        url: /* jinja */ {{ url_for('uploaded_file', filename=filename) | tojson }},
+        pageNumber: /* jinja */ {{ page|default(1) | tojson }},
+        bbox: /* jinja */ {{ bbox|default('') | tojson }}
+      };
+    </script>
+
+    <script src="{{ url_for('static', filename='js/pdf_viewer.js') }}"></script>
+</body>
+</html>

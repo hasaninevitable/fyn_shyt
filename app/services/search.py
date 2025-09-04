@@ -18,7 +18,9 @@ def semantic_search(query, embeddings, data, top_k=5):
     query_embedding = model.encode([query])[0]
     sims = np.array([cosine_similarity(query_embedding, emb) for emb in embeddings])
 
+    # Get indices for top_k highest similarity scores
     top_indices = sims.argsort()[-top_k:][::-1]
+
     results = []
     for idx in top_indices:
         results.append({
@@ -27,4 +29,5 @@ def semantic_search(query, embeddings, data, top_k=5):
             "bbox": data[idx]["bbox"],
             "score": float(sims[idx])
         })
+
     return results

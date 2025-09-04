@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ESG Sentences</title>
+</head>
+<body>
+    <h2>ESG-related Sentences in Your PDF</h2>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% else %}
+        {% if results %}
+            <ul>
+            {% for res in results %}
+                <li>
+                    <strong>Page {{ res.page }}</strong>: {{ res.text }}
+                    <a href="/static/pdfjs/web/viewer.html?file=/uploads/{{ filename }}&page={{ res.page }}&bbox={{ res.bbox | urlencode }}" target="_blank" rel="noopener noreferrer">
+  Locate in PDF
+</a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No ESG sentences found.</p>
+        {% endif %}
+    {% endif %}
+
+    <a href="{{ url_for('upload.upload_file') }}">Back to Upload</a>
+</body>
+</html>
